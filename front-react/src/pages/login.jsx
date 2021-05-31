@@ -1,6 +1,5 @@
 import { 
-  Avatar, Button, Checkbox, Container, FormControlLabel,
-  Grid, makeStyles, TextField, Typography 
+  Avatar, Button, Container,Grid, makeStyles, TextField, Typography 
 } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 import React, { useState } from 'react';

@@ -1,7 +1,7 @@
 import { 
-  Avatar, Button, Container, FormControl, InputLabel, makeStyles, MenuItem, Select, TextField, Typography 
+  Avatar, Button, Container, Fab, FormControl, InputLabel, makeStyles, MenuItem, Select, TextField, Typography 
 } from '@material-ui/core';
-import { LockOutlined } from '@material-ui/icons';
+import { ArrowBack, LockOutlined } from '@material-ui/icons';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -26,6 +26,12 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  voltar: {
+    width: '10%',
+    margin: theme.spacing(0, 5, 0),
+    marginRight: '400px',
+
   },
 
   button: {
@@ -72,7 +78,7 @@ const Register = () => {
     hashPass=0
     /* tem que salvar o jwt e tem que verficiar para entrar no dashboard */
 
-    history.push(`/`)
+    history.goBack()
   }
 
   const handleChange = (event) => {
@@ -87,6 +93,11 @@ const Register = () => {
     setOpen(true);
   };
 
+  const goBack = () => {
+
+    history.goBack()
+  };
+
   
 
   const classes = useStyles();
@@ -97,6 +108,15 @@ const Register = () => {
         <Avatar className={classes.avatar}>
           <LockOutlined />
         </Avatar>
+        <Fab
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.voltar}
+            onClick={goBack}
+          >
+            <ArrowBack />
+          </Fab>
         <Typography component="h1" variant="h5">
           Register in SCRUDA
         </Typography>

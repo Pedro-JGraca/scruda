@@ -1,95 +1,34 @@
 import {
-  AppBar, Box, Button, Divider, Drawer, Hidden, IconButton, List, ListItem,
-  ListItemIcon, ListItemText, makeStyles, Toolbar, Typography, useTheme
+  makeStyles
  } from '@material-ui/core';
-import { AccountCircle,ChevronLeft,ChevronRight,Inbox,Mail,Menu,ExitToApp
-} from '@material-ui/icons';
-import React from 'react';
-import clsx from 'clsx';
-
-
-const drawerWidth = 240;
+import React, { useState } from 'react';
+import { useHistory } from 'react-router';
+import TopBar from '../components/topBar';
+import LeftDrawer from '../components/leftDrawer';
+import DataBases from './dataBases';
+import Users from './users';
+import Logs from './logs';
+import Main from '../components/main';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
     display: 'flex',
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    paddingLeft: 25,
-    marginRight: 36,
-  },
-  hide: {
-    display: 'none',
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 2 ,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 10,
-    },
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-  },
   content: {
+    marginTop: 40,
     flexGrow: 1,
     padding: theme.spacing(6),
   },
-  icon: {
-    fontSize: 'large',
-    border: 'none',
-    height: 10,
-  },
-  logo: {
-    height: 30,
-    border: 'none',
-  },
+
 }));
 
 const DashBoard = () => {
-
+  const history = useHistory();
   const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [page,setPage] = useState('')
+  //const [location, setLocation] = React.useState('');
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -99,96 +38,60 @@ const DashBoard = () => {
     setOpen(false);
   };
 
-    return (
+  const handleExit = () => {
+    //apagar o jwt
+    history.push(`/`)
+  }
+  const goDashboard = () => {
+
+    setPage('')
+    /*history.push(`/dashboard`)*/
+  }
+
+  const handleDataBases = () => {
+    setPage('dataBase')
+    //history.push(`/dashboard`)
+  }
+
+  const handleUsers = () => {
+    setPage('users')
+    //history.push(`/dashboard`)
+    
+  }
+  const handleLogs = () => {
+    setPage('logs')
+    //history.push(`/dashboard`)
+  }
+
+  return (
       
     <div className={classes.root}>
 
-      <AppBar
-        position="fixed"
-        color='primary'
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
-          >
-            <Menu />
-          </IconButton>
+      <TopBar 
+        open = {open} 
+        handleDrawerOpen={handleDrawerOpen}
+        handleDrawerClose={handleDrawerClose} 
+        goDashboard = {goDashboard}
+        handleExit = {handleExit}
+      />
 
-          <Button 
-            variant="outlined"
-            color='inherit'
-            startIcon= {<img src="/images/logo.png" alt="logo" className={classes.logo} />}
-            className={classes.logo}
-            >
-          </Button>
-          
-          
-          <div className={classes.grow} />
+      <LeftDrawer
+        open = {open}
+        handleDrawerOpen={handleDrawerOpen}
+        handleDrawerClose={handleDrawerClose}
+        handleDataBases={handleDataBases}
+        handleUsers={handleUsers}
+        handleLogs={handleLogs}
+      />
 
-          <Button 
-            variant="outlined"
-            color='inherit'
-            startIcon={<ExitToApp />}
-            className={classes.icon}
-            >
-          </Button>
-
-          <Button 
-            variant="outlined"
-            color='inherit'
-            startIcon={<AccountCircle />}
-            className={classes.icon}
-            >
-          </Button>
-          
-          
-        </Toolbar>
-      </AppBar>
-
-      <Drawer
-        variant="permanent" 
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
-        }}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
 
       
       <main className={classes.content}>
-        {/* Colocar aqui as outras paginas dentro do dashboard */}
+        <Main page = {page}/>
       </main>
     
     </div>
+    
     );
 }
  
