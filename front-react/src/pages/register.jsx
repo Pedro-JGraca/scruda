@@ -1,10 +1,9 @@
 import { 
-  Avatar, Button, Checkbox, Container, FormControlLabel,
-  Grid, makeStyles, TextField, Typography 
+  Avatar, Button, Container, FormControl, InputLabel, makeStyles, MenuItem, Select, TextField, Typography 
 } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,16 +27,31 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+
+  button: {
+    display: 'block',
+    marginTop: theme.spacing(2),
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    marginTop: 30,
+    marginBottom: 50,
+    marginLeft: 150,
+  },
 }));
 
 
 
-const Login = () => {
+
+const Register = () => {
   const history = useHistory()
 
   var sha512 = require('js-sha512').sha512;
   const [inputUser, setUser] = useState('');
   const [inputPass, setPass] = useState('');
+  const [typeUser, setTypeUser] = useState('');
+  const [open, setOpen] = useState(false);
 
   const handleInputUser = (e) => {
     setUser(e.target.value)
@@ -50,15 +64,30 @@ const Login = () => {
     console.log(inputUser)
     var hashPass = sha512(inputPass)
     console.log(hashPass)
+    console.log(typeUser)
+
     /*
-    apiLogin(inputUser,hashPass)
+    apiRegister(inputUser,hashPass)
     */
     hashPass=0
-    /* tem que salvar o jwt para solicitar os dados 
-     * tem que verficiar se a conta foi validada para executar o acima */
+    /* tem que salvar o jwt e tem que verficiar para entrar no dashboard */
 
-    history.push(`/dashboard`)
+    history.push(`/`)
   }
+
+  const handleChange = (event) => {
+    setTypeUser(event.target.value);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  
 
   const classes = useStyles();
 
@@ -69,11 +98,7 @@ const Login = () => {
           <LockOutlined />
         </Avatar>
         <Typography component="h1" variant="h5">
-          SCRUDA
-        </Typography>
-        <Typography component="p">
-          System to Create, Register, Update, Drop and Alter data and tables in a relational database.
-
+          Register in SCRUDA
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -100,6 +125,27 @@ const Login = () => {
             id="password"
             autoComplete="current-password"
           />
+
+        <FormControl className={classes.formControl}>
+            <InputLabel id="type-user">Tipo</InputLabel>
+            <Select
+                labelId="type-user"
+                id='type-user'
+                open={open}
+                onClose={handleClose}
+                onOpen={handleOpen}
+                value={typeUser}
+                onChange={handleChange}
+            >
+                <MenuItem value="">
+                    <em>None</em>
+                </MenuItem>
+                <MenuItem value={'admin'}>Admin</MenuItem>
+                <MenuItem value={'user'}>User</MenuItem>
+            </Select>
+        </FormControl>
+        
+
           <Button
             fullWidth
             variant="contained"
@@ -107,19 +153,15 @@ const Login = () => {
             className={classes.submit}
             onClick={handleLogin}
           >
-            Entrar
+            Regiter
           </Button>
-          <Grid container>
-            <Grid item>
-              <Link to="/register" variant="body2">
-                Registrar
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
 
     </Container>
   );
 }
-export default Login;
+
+
+
+export default Register;

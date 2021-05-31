@@ -1,7 +1,11 @@
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
-import React from 'react';
+import {BrowserRouter as Router, Route, useHistory} from 'react-router-dom';
+import React, { useState } from 'react';
 import Login from './pages/login'
 import DashBoard from './pages/dashboard'
+import Register from './pages/register';
+
+
 
 function App() {
 
@@ -16,16 +20,41 @@ function App() {
       },
       background:{
         default: '#444',
-        paper: '#BF4040',
+        paper: '#855',
       }
 
     }
   })
+  
+
 
   return (
     <div >
       <ThemeProvider theme={theme}>
-        <DashBoard />
+        <Router>
+
+          <Route path="/" exact render={() => (
+            <Login />
+            )}
+          />
+
+          <Route path="/dashboard" exact render={() => {
+            //pegar validação de login
+            return (<DashBoard />)
+      
+            }}
+          />
+
+          <Route path="/register" exact render={() => (
+            <Register />
+            )}
+          />
+        </Router>
+
+
+
+
+        
       </ThemeProvider>
     </div>
   );
